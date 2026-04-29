@@ -18,11 +18,12 @@ pipeline {
     stage('Container Run Test') {
       steps {
         sh '''
-          docker stop webapp-ci || true
-          docker rm webapp-ci || true
-          docker run -d -p 3001:3000 --name webapp-ci webapp:latest
-          sleep 3
-          curl http://localhost:3001/health
+          docker stop webapp-ci 2>/dev/null || true
+          docker rm webapp-ci 2>/dev/null || true
+          docker run -d --name webapp-ci webapp:latest
+          sleep 5
+          docker exec webapp-ci wget -qO- http://localhost:3000/health
+          echo "Health check passed!"
           docker stop webapp-ci
           docker rm webapp-ci
         '''
