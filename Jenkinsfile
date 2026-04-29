@@ -32,8 +32,8 @@ pipeline {
 
     stage('Deploy to Kubernetes') {
       steps {
-        sh 'kubectl apply -f k8s/deployment.yaml'
-        sh 'kubectl rollout status deployment/webapp'
+        sh 'kubectl --kubeconfig=/var/jenkins_home/.kube/config --validate=false apply -f k8s/deployment.yaml'
+        sh 'kubectl --kubeconfig=/var/jenkins_home/.kube/config rollout status deployment/webapp'
       }
     }
 
